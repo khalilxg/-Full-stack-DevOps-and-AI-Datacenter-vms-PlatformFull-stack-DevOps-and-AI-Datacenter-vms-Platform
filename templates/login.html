@@ -1,0 +1,46 @@
+<link rel="stylesheet" type="text/css" href="/static/admin/css/base.css">
+<link rel="stylesheet" type="text/css" href="/static/admin/css/nav_sidebar.css">
+<link rel="stylesheet" type="text/css" href="/static/admin/css/login.css">
+<link rel="stylesheet" type="text/css" href="/static/admin/css/responsive.css">
+
+<body class="login">
+  <div id="container">
+    <div id="header">
+      <div id="branding">
+        <h1 id="site-name"><a href="/">Django administration</a></h1>
+      </div>
+    </div>
+    <div id="content" class="colM">
+      <div id="content-main">
+        <form method="post" id="login-form">
+          {% csrf_token %}
+          <div class="form-row">
+            <label class="required" for="id_username">Username:</label>
+            <input type="text" name="username" autofocus autocapitalize="none" autocomplete="username" maxlength="150" required id="id_username" class="form-control">
+          </div>
+          <div class="form-row">
+            <label class="required" for="id_password">Password:</label>
+            <input type="password" name="password" autocomplete="current-password" required id="id_password" class="form-control">
+            <input type="hidden" name="next" value="/admin/">
+          </div>
+          <div class="submit-row">
+            <input type="submit" value="Log in" class="btn btn-primary btn-block">
+          </div>
+        </form>
+        <br>
+        <form method="post">
+          {% csrf_token %}
+          <p class="text-center mt-3">Don't have an account? <a href="{% url 'registration' %}">Sign up</a></p>
+        </form>
+        {% if error_message %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          {{ error_message }}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</body>

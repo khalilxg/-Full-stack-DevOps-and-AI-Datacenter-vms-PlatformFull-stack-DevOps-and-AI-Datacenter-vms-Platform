@@ -1,0 +1,17 @@
+ku# example-csi-restore.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: win-disk2 # we replace the name of the pvc with vm.id (so the namewillbe vm.id) 
+spec:
+  storageClassName: csi-hostpath-sc
+  dataSource:
+    name: snapshot-winservrdesktop
+    kind: VolumeSnapshot
+    apiGroup: snapshot.storage.k8s.io
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi # we replace the amout of storage with vm.rom
+

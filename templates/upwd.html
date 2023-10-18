@@ -1,0 +1,141 @@
+
+<!DOCTYPE html>
+
+<html lang="en-us" dir="ltr">
+<head>
+  
+<title>Password change | Django site admin</title>
+<link rel="stylesheet" type="text/css" href="/static/admin/css/base.css">
+
+  <link rel="stylesheet" type="text/css" href="/static/admin/css/nav_sidebar.css">
+  <script src="/static/admin/js/nav_sidebar.js" defer></script>
+
+<link rel="stylesheet" type="text/css" href="/static/admin/css/forms.css">
+
+
+
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/static/admin/css/responsive.css">
+    
+
+<meta name="robots" content="NONE,NOARCHIVE">
+</head>
+
+
+<body class=""
+  data-admin-utc-offset="0">
+
+<!-- Container -->
+<div id="container">
+
+    
+    <!-- Header -->
+    <div id="header">
+        <div id="branding">
+        
+<h1 id="site-name"><a href="/my-page/">Django</a></h1>
+
+        </div>
+        
+        
+        <div id="user-tools">
+            
+                Welcome,
+                <strong>{{ user.username }}</strong>.
+            
+             Change password / <a href="{% url 'logout' %}">Log out</a>
+        </div>
+        
+        
+        
+    </div>
+    <!-- END Header -->
+    
+<div class="breadcrumbs">
+<a href="/my-page/">Home</a>
+&rsaquo; Password change
+</div>
+
+    
+
+    <div class="main shifted" id="main">
+      
+        
+          
+
+
+
+</nav>
+
+        
+      
+      <div class="content">
+        
+          
+        
+        <!-- Content -->
+        <div id="content" class="colM">
+          
+          <h1>Password change</h1>
+          
+          <div id="content-main">
+
+{% if messages %}
+<ul class="messages">
+  {% for message in messages %}
+  <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+
+<form method="post" action="{% url 'change_password' %}">
+  {% csrf_token %}
+<div>
+
+<fieldset class="module aligned wide">
+
+<div class="form-row">
+    
+    <label class="required" for="id_old_password">Old password:</label> <input type="password" name="old_password" autocomplete="current-password" autofocus required id="id_old_password">
+</div>
+
+<div class="form-row">
+    
+    <label class="required" for="id_new_password1">New password:</label> <input type="password" name="new_password1" autocomplete="new-password" required id="id_new_password1">
+    
+    <div class="help"><ul><li>Your password can’t be too similar to your other personal information.</li><li>Your password must contain at least 8 characters.</li><li>Your password can’t be a commonly used password.</li><li>Your password can’t be entirely numeric.</li></ul></div>
+    
+</div>
+
+<div class="form-row">
+
+    <label class="required" for="id_new_password2">New password confirmation:</label> <input type="password" name="new_password2" autocomplete="new-password" required id="id_new_password2">
+    
+</div>
+
+</fieldset>
+
+<div class="submit-row">
+    <input type="submit" value="Change my password">
+</div>
+{% for field in form %}
+{% for error in field.errors %}
+  <p style="color: red;">{{ error }}</p>
+{% endfor %}
+{% endfor %}
+</div>
+</form></div>
+
+
+          
+          <br class="clear">
+        </div>
+        <!-- END Content -->
+        <div id="footer"></div>
+      </div>
+    </div>
+</div>
+<!-- END Container -->
+
+</body>
+</html>

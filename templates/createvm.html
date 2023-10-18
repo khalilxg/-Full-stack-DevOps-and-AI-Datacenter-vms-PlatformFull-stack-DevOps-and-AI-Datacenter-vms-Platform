@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+
+<html lang="en-us" dir="ltr">
+<head>
+<title>Site administration | Django site admin</title>
+<link rel="stylesheet" type="text/css" href="/static/admin/css/base.css">
+
+  <link rel="stylesheet" type="text/css" href="/static/admin/css/nav_sidebar.css">
+  <script src="/static/admin/js/nav_sidebar.js" defer></script>
+
+<link rel="stylesheet" type="text/css" href="/static/admin/css/dashboard.css">
+
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/static/admin/css/responsive.css">
+
+<meta name="robots" content="NONE,NOARCHIVE">
+</head>
+
+
+<body class=" dashboard"
+  data-admin-utc-offset="0">
+
+<!-- Container -->
+<div id="container">
+
+    
+    <!-- Header -->
+    <div id="header">
+        <div id="branding">
+        
+<h1 id="site-name"><a href="/my-page">Django</a></h1>
+
+        </div>
+        
+        
+        <div id="user-tools">
+            
+                Welcome,
+                <strong>{{ user.username }}</strong>.
+                <a href="/password_change/">Change password</a> /       
+                <a href="{% url 'logout' %}">Log out</a>
+        </div>
+
+    </div>
+    <!-- END Header -->
+
+    
+    
+
+    <div class="main shifted" id="main">
+
+      <div class="content">
+ <!-- Content -->
+        <div id="content" class="colMS">
+          <h1>Management Site</h1>
+          {% if message %}
+          <div class="alert alert-success">{{ message }}</div>
+          {% endif %}
+          
+          <div id="content" class="colM">
+            <div id="content-main">
+          <form method="POST" id="vm-form">
+            {% csrf_token %}
+<div>
+  <label for="os">OS:</label>
+  <input type="radio" name="os" value="windows">Windows
+  <input type="radio" name="os" value="ubuntu">Ubuntu
+</div>
+            <p></p>
+
+            <div>
+              <label for="cpu">CPU:</label>
+              <input type="number" name="cpu" id="cpu-input" min="1" max="10" step="1">
+            </div>
+            <div>
+              <label for="ram">RAM:</label>
+              <input type="number" name="ram" id="ram-input" min="1" max="100" step="1">
+            </div>
+            <div>
+              <label for="rom">Hard Disk:</label>
+              <input type="number" name="rom" id="rom-input" min="10" max="1000" step="1">
+            </div>
+            <p></p>
+            <div>
+              <label for="sub">Subscription months:</label>
+              <input type="number" name="sub" id="sub-input" min="1" max="12" step="1">
+            </div>
+            <p></p>
+            <div>
+              <button type="submit" name="action" value="calculate" onclick="return calculateVM(event)">Calculate</button>
+              <button type="submit" name="save">Save</button>
+            </div>
+          </form>
+          {% if total is not None %}
+          <p>Total: ${{ total }}</p>
+          <h1>Management Site</h1>
+
+        {% endif %}
+            <form action="{% url 'create_vm' %}" method="POST" id="create-vm-form">
+              <p></p>
+              <p></p>
+              <p></p>
+              <p></p>
+
+              <div class="warning">
+                <p>This is a warning message. 
+                  once the the Disk/ROM is created, it cannot be resized via the web interface. You should contact the administrator to resize the disk.
+                </p>
+              </div>             
+               <div class="warning">
+                <p>Payement Alert. 
+                  Electrnic payment card is required to complete the payment. The card accepted are e-DINAR SMART, Pioneer, and UnionPay, Visa, MasterCard, American Express, Discover, JCB, Diners Club,
+                </p>
+              </div>
+              
+
+  <style>
+  .warning {
+    background-color: #080505;
+    border: 1px solid #d68888;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  </style>
+ 
+          <script>
+  function calculateVM(event) {
+  event.preventDefault();
+  const osInputs = document.getElementsByName("os");
+  const cpuInput = document.getElementById("cpu-input");
+  const ramInput = document.getElementById("ram-input");
+  const romInput = document.getElementById("rom-input");
+  const packageInputs = document.getElementsByName("packages");
+  const subInput = document.getElementById("sub-input");
+  let osTotal = 0;
+  for (const osInput of osInputs) {
+    if (osInput.checked) {
+      osTotal += 100;
+    }
+  }
+
+  const cpu = parseInt(cpuInput.value);
+  const ram = parseInt(ramInput.value);
+  const rom = parseInt(romInput.value);
+  const sub = parseInt(subInput.value);
+
+  let packageTotal = 0;
+  for (const packageInput of packageInputs) {
+    if (packageInput.checked) {
+      packageTotal += 100;
+    }
+  }
+
+  const total = (osTotal + cpu * 100 + ram * 100 + rom + packageTotal) * sub;
+
+  let totalElement = document.getElementById("total");
+  if (!totalElement) {
+    totalElement = document.createElement("p");
+    totalElement.setAttribute("id", "total");
+    const form = document.getElementById("vm-form");
+    form.appendChild(totalElement);
+  }
+  totalElement.textContent = "Total: $" + total;
+
+  return false;
+}
+          </script>
+            
+          
+          <br class="clear">
+        </div>
+        <!-- END Content -->
+        <div id="footer"></div>
+      </div>
+    </div>
+
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,281 @@
+
+<!DOCTYPE html>
+<html>
+
+<html lang="en-us" dir="ltr">
+<head>
+<title>Site administration | Django site admin</title>
+<link rel="stylesheet" type="text/css" href="/static/admin/css/base.css">
+
+  <link rel="stylesheet" type="text/css" href="/static/admin/css/nav_sidebar.css">
+  <script src="/static/admin/js/nav_sidebar.js" defer></script>
+
+<link rel="stylesheet" type="text/css" href="/static/admin/css/dashboard.css">
+
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/static/admin/css/responsive.css">
+
+<meta name="robots" content="NONE,NOARCHIVE">
+</head>
+
+
+<body class=" dashboard"
+  data-admin-utc-offset="0">
+
+<!-- Container -->
+<div id="container">
+
+    
+    <!-- Header -->
+    <div id="header">
+        <div id="branding">
+        
+<h1 id="site-name"><a href="/my-page">Django</a></h1>
+
+        </div>
+        
+        
+      </div>
+      <div id="user-tools">
+        Welcome, <strong>{{ user.username }}</strong>.
+        <a href="/password_change/">Change password</a> /
+        {% if user.is_superuser %}
+            <a href="/admin/">Super User HR /</a>
+        {% endif %}
+        <a href="{% url 'logout' %}">Log out</a>
+    </div>
+    <!-- END Header -->
+    
+    
+
+
+<head>
+  <h1 style="font-size: 2em;"></h1>
+  <h1 style="font-size: 2em;">=================</h1>
+  <h1 style="font-size: 2em;">Security Pedestrian</h1>
+  <p>Yolo-NAS .</p>
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.15.0/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.0/dist/coco-ssd.min.js"></script>
+</head>
+<table id="container">
+  <tr>
+    <td id="cameraContainer">
+      <video id="webcamVideo" style="display: none;"></video>
+      <canvas id="detectionCanvas" style="width: 640px; height: 480px;"></canvas>
+    </td>
+    <td id="messageContainer">
+      <select id="notificationBox" size="5"></select>
+    </td>
+  </tr>
+</table>
+
+<style>
+  #container {
+    width: 100%;
+    table-layout: fixed;
+  }
+
+  #cameraContainer,
+  #messageContainer {
+    width: 50%;
+    vertical-align: top;
+  }
+
+  #messageContainer {
+    height: 480px;
+    overflow: auto;
+  }
+
+  #notificationBox {
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+
+
+<script>
+  // Access the webcam stream
+  const video = document.getElementById('webcamVideo');
+  const canvas = document.getElementById('detectionCanvas');
+  const context = canvas.getContext('2d');
+  const notificationBox = document.getElementById('notificationBox');
+  let lastDetectionTime = 0;
+  const csvFileName = "output3.csv"; // Specify the name of your CSV file here
+
+  navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => {
+          video.srcObject = stream;
+          video.play();
+      })
+      .catch(error => {
+          console.error('Error accessing webcam:', error);
+      });
+
+  // Load the object detection model
+  cocoSsd.load().then(model => {
+      // Function to perform object detection on each video frame
+      function detectObjects() {
+          context.drawImage(video, 0, 0, canvas.width, canvas.height);
+          model.detect(canvas).then(predictions => {
+              // Check if a person is detected
+              const personDetected = predictions.some(prediction => prediction.class === 'person');
+
+              // Display "Human detected" every 10 seconds when a person is detected
+              const currentTime = new Date().getTime();
+              const currentTimeInSeconds = Math.floor(currentTime / 1000);
+              if (personDetected && currentTimeInSeconds - lastDetectionTime >= 10) {
+                  const currentTimeFormatted = formatTime(currentTime);
+                  const currentDateFormatted = formatDate(currentTime);
+                  const message = `${currentDateFormatted} ${currentTimeFormatted}: Human detected`;
+                  addToDropdown(message);
+                  lastDetectionTime = currentTimeInSeconds;
+              }
+
+              // Draw the bounding boxes and labels on the canvas
+              for (const prediction of predictions) {
+                  const [x, y, width, height] = prediction.bbox;
+                  context.strokeStyle = 'yellow';
+                  context.lineWidth = 0.5;
+                  context.beginPath();
+                  context.rect(x, y, width, height);
+                  context.stroke();
+                  context.fillStyle = 'yellow';
+                  context.font = '8px Arial';
+                  context.fillText(prediction.class, x, y - 5);
+              }
+
+              // Call the detectObjects function recursively on the next video frame
+              requestAnimationFrame(detectObjects);
+          });
+      }
+
+      // Function to format the time as HH:MM:SS
+      function formatTime(timestamp) {
+          const currentTime = new Date(timestamp);
+          const hours = currentTime.getHours();
+          const minutes = currentTime.getMinutes();
+          const seconds = currentTime.getSeconds();
+          return `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      }
+
+      // Function to format the date as DD/MM/YYYY
+      function formatDate(timestamp) {
+          const currentDate = new Date(timestamp);
+          const day = currentDate.getDate();
+          const month = currentDate.getMonth() + 1;
+          const year = currentDate.getFullYear();
+          return `${day}/${month.toString().padStart(2, '0')}/${year}`;
+      }
+
+      // Function to add a message to the dropdown list
+      function addToDropdown(message) {
+          const option = document.createElement('option');
+          option.textContent = message;
+          notificationBox.insertBefore(option, notificationBox.firstChild);
+      }
+
+      // Start the object detection process
+      detectObjects();
+  }).catch(error => {
+      console.error('Error loading object detection model:', error);
+  });
+</script>
+
+
+<h1 style="font-size: 2em;"></h1>
+<h1 style="font-size: 2em;">=================</h1>
+<h1 style="font-size: 2em;">Network Analysis</h1>
+<p>Argus Pro Sniff .</p>
+<div style="height: 10cm; overflow-y: scroll;">
+  <table id="csv-table1"></table>
+</div>
+
+<script>
+  function loadCsv1() {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        var csvData = xhr.responseText;
+        var csvRows = csvData.split('\n');
+        var tableHtml = '';
+        var csvColumns = csvRows[0].split(',');
+        
+        tableHtml += '<tr>';
+        for (var j = 0; j < csvColumns.length; j++) {
+          tableHtml += '<th>' + csvColumns[j] + '</th>';
+        }
+        tableHtml += '</tr>';
+        
+        for (var i = csvRows.length - 1; i >= 1; i--) {
+          csvColumns = csvRows[i].split(',');
+          tableHtml += '<tr>';
+          for (var j = 0; j < csvColumns.length; j++) {
+            tableHtml += '<td>' + csvColumns[j] + '</td>';
+          }
+          tableHtml += '</tr>';
+        }
+        
+        document.getElementById('csv-table1').innerHTML = tableHtml;
+      }
+    };
+    xhr.open('GET', '/get_output_csv/', true);
+    xhr.send();
+  }
+  
+  // Load the CSV data on page load
+  loadCsv1();
+  
+  // Refresh the CSV data every 5 seconds
+  setInterval(loadCsv1, 5000);
+</script>
+<h1 style="font-size: 2em;"></h1>
+<h1 style="font-size: 2em;">=================</h1>
+
+  <h1 style="font-size: 2em;">Cyber Anomalies</h1>
+  <p>XGBoost Predicted Anomalies .</p>
+
+
+<div style="height: 5cm; overflow-y: scroll;">
+  <table id="csv-table2"></table>
+</div>
+<script>
+  function loadCsv2() {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        var csvData = xhr.responseText;
+        var csvRows = csvData.split('\n');
+        csvRows.reverse(); // Reverse the order of the rows
+        var tableHtml = '';
+        var csvColumns = csvRows[0].split(',');
+        tableHtml += '<tr>';
+        for (var j = 0; j < csvColumns.length; j++) {
+          tableHtml += '<th>' + csvColumns[j] + '</th>';
+        }
+        tableHtml += '</tr>';
+        for (var i = 1; i < csvRows.length; i++) {
+          csvColumns = csvRows[i].split(',');
+          tableHtml += '<tr>';
+          for (var j = 0; j < csvColumns.length; j++) {
+            tableHtml += '<td>' + csvColumns[j] + '</td>';
+          }
+          tableHtml += '</tr>';
+        }
+        document.getElementById('csv-table2').innerHTML = tableHtml;
+      }
+    };
+    xhr.open('GET', '/get_output2_csv/', true);
+    xhr.send();
+  }
+  
+  // Load the CSV data on page load
+  loadCsv2();
+  
+  // Refresh the CSV data every 5 seconds
+  setInterval(loadCsv2, 5000);
+</script>
+<h1 style="font-size: 2em;"></h1>
+<h1 style="font-size: 2em;">=================</h1>

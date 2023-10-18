@@ -1,0 +1,37 @@
+    apiVersion: kubevirt.io/v1alpha3
+    kind: VirtualMachine
+    metadata:
+      name: win
+    spec:
+      running: true
+      template:
+        metadata:
+          labels:
+            kubevirt.io/domain: win
+        spec:
+          domain:
+            cpu:
+              cores: 2
+            devices:
+              disks:
+              - disk:
+                  bus: virtio
+                name: harddrive
+                bootOrder: 1
+              - cdrom:
+                  bus: sata
+                name: virtiocontainerdisk
+            machine:
+              type: q35
+            resources:
+              requests:
+                memory: 4G
+          volumes:
+          - name: harddrive
+            persistentVolumeClaim:
+              claimName: win
+          - containerDisk:
+              image: kubevirt/virtio-container-disk
+            name: virtiocontainerdisk
+
+

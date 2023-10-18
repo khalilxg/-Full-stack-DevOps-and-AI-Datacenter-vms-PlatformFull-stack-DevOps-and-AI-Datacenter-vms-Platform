@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+
+<html lang="en-us" dir="ltr">
+<head>
+<title>Site administration | Django site admin</title>
+<link rel="stylesheet" type="text/css" href="/static/admin/css/base.css">
+
+  <link rel="stylesheet" type="text/css" href="/static/admin/css/nav_sidebar.css">
+  <script src="/static/admin/js/nav_sidebar.js" defer></script>
+
+<link rel="stylesheet" type="text/css" href="/static/admin/css/dashboard.css">
+
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/static/admin/css/responsive.css">
+
+<meta name="robots" content="NONE,NOARCHIVE">
+</head>
+
+
+<body class=" dashboard"
+  data-admin-utc-offset="0">
+
+<!-- Container -->
+<div id="container">
+
+    
+    <!-- Header -->
+    <div id="header">
+        <div id="branding">
+        
+<h1 id="site-name"><a href="/my-page">Django</a></h1>
+
+        </div>
+        
+        
+        <div id="user-tools">
+            
+                Welcome,
+                <strong>{{ user.username }}</strong>.
+                <a href="/password_change/">Change password</a> /       
+                <a href="{% url 'logout' %}">Log out</a>
+        </div>
+
+    </div>
+    <!-- END Header -->
+    
+    
+
+    <div class="main shifted" id="main">
+
+      <div class="content">
+ <!-- Content -->
+        <div id="content" class="colMS">
+<style>
+  .container-wide {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+</style>
+
+          {% block content %}
+            <div class="container-wide">
+              <h1>Manage Virtual Machines</h1>
+                  <table class="table" style="width: 150%;">
+                    <thead>
+                      <tr>
+                        <th>OS</th>
+                        <th>CPU</th>
+                        <th>RAM</th>
+                        <th>Total</th>
+                        <th>$ Monthly</th>
+                        <th>User</th>
+                        <th>CRT Date</th>
+                        <th>EXP Date</th>
+                        <th>Payed</th>
+                        <th>ID</th>
+                        <th>Status</th>
+                        <th>Ressources</th>
+                        <th>ADD Sub Months</th>
+                        <th colspan="14">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      
+                      {% for vm in vms %}
+                      {% if vm.user == request.user.username %}
+                        <tr>
+                          <form method="post" id="vm-form-{{ vm.id }}" target="_blank">
+                            {% csrf_token %}
+                            <input type="hidden" name="vm_id" value="{{ vm.id }}">
+                            <td>{{ vm.os }}</td>
+                            <td>
+                              <input type="range" name="cpu" id="cpu-input-{{ vm.id }}" min="1" max="10" step="1" value="{{ vm.cpu }}">
+                              <span id="cpu-value-{{ vm.id }}">{{ vm.cpu }}</span>
+                            </td>
+                            <td>
+                              <input type="range" name="ram" id="ram-input-{{ vm.id }}" min="1" max="100" step="1" value="{{ vm.ram }}">
+                              <span id="ram-value-{{ vm.id }}">{{ vm.ram }}</span> GB
+                            </td>
+                            <td>{{ vm.total }}</td>
+                            <td>{{ vm.fbill }}</td>
+                            <td>{{ vm.user }}</td>
+                            <td>{{ vm.creation_date }}</td>
+                            <td>{{ vm.expiration_date }}</td>
+                            <td>{{ vm.payed }}</td>
+                            <td>{{ vm.id }}</td>
+                            <td>{{ vm.status }}</td>
+                            <td>{{ vm.vm_name }}</td>
+                            <td>
+                              <input type="number" name="sub" id="sub-input-{{ vm.id }}" min="0" max="12" step="1" value="0" >
+                              <span>months</span>
+                            </td>
+                            <td>
+                              <style>
+                                button {
+                                  background-color: #0e6e80;
+                                  border: none;
+                                  color: white;
+                                  padding: 5px 15px;
+                                  text-align: center;
+                                  text-decoration: none;
+                                  display: inline-block;
+                                  font-size: 11px;
+                                  margin: 4px 2px;
+                                  cursor: pointer;
+                                }
+                              </style>
+                              <button type="submit" form="vm-form-{{ vm.id }}" name="update_vm">Update & Pay Server/VM</button>
+                              <button type="submit" form="vm-form-{{ vm.id }}" name="start_vm_view">Start Server/VM</button>
+                              <button type="submit" form="vm-form-{{ vm.id }}" name="stop_vm_view">Stop Server/VM</button>
+                              <button type="submit" form="vm-delete-form-{{ vm.id }}" name="delete_vm">Delete Server/VM</button>
+                              <input type="hidden" name="vm_id" value="{{ vm.id }}">
+                              <!-- Add the hidden input field with vm.id value -->
+                            </td>
+                          </form>
+                          <form method="post" id="vm-delete-form-{{ vm.id }}">
+                            {% csrf_token %}
+                            <input type="hidden" name="vm_id" value="{{ vm.id }}">
+                          </form>
+                        </tr>
+                      {% endif %}
+                    {% endfor %}
+                    <script>
+                      function updateValue(id, value) {
+                        document.getElementById(id).innerHTML = value;
+                      }
+                    
+                      {% for vm in vms %}
+                        var cpuRange{{ vm.id }} = document.getElementById("cpu-input-{{ vm.id }}");
+                        var cpuValue{{ vm.id }} = document.getElementById("cpu-value-{{ vm.id }}");
+                        var ramRange{{ vm.id }} = document.getElementById("ram-input-{{ vm.id }}");
+                        var ramValue{{ vm.id }} = document.getElementById("ram-value-{{ vm.id }}");
+                    
+                        function updateValues() {
+                          var xhr = new XMLHttpRequest();
+                          xhr.onreadystatechange = function() {
+                            if (this.readyState == 4 && this.status == 200) {
+                              var data = JSON.parse(this.responseText);
+                              updateValue("cpu-value-{{ vm.id }}", data.cpu);
+                              updateValue("ram-value-{{ vm.id }}", data.ram);
+                              cpuRange{{ vm.id }}.value = data.cpu;
+                              ramRange{{ vm.id }}.value = data.ram;
+                            }
+                          };
+                          xhr.open("GET", "/get_vm_values/{{ vm.id }}", true);
+                          xhr.send();
+                        }
+                    
+                        updateValues();
+                    
+                        cpuRange{{ vm.id }}.oninput = function() {
+                          updateValue("cpu-value-{{ vm.id }}", this.value);
+                          updateValues();
+                        }
+                    
+                        ramRange{{ vm.id }}.oninput = function() {
+                          updateValue("ram-value-{{ vm.id }}", this.value);
+                          updateValues();
+                        }
+                      {% endfor %}
+                    
+                      window.onload = function() {
+                        {% for vm in vms %}
+                          updateValues();
+                        {% endfor %}
+                      }
+                    </script>
+                                        {% endblock %}
+
+                    </tbody>
+
+        </div></div></div></div></body></html>

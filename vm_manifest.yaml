@@ -1,0 +1,27 @@
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  labels:
+    kubevirt.io/vm: 
+  name: 
+spec:
+  running: false
+  template:
+    metadata:
+      labels:
+        kubevirt.io/vm: 
+    spec:
+      domain:
+        devices:
+          disks:
+          - disk:
+              bus: virtio
+            name: dv
+        resources:
+          requests:
+            cpu: 
+            memory: 
+      volumes:
+      - name: dv
+        persistentVolumeClaim:
+          claimName: 

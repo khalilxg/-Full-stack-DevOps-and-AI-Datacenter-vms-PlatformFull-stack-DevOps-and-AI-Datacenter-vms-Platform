@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Registration | Django Administration</title>
+  <link rel="stylesheet" type="text/css" href="/static/admin/css/base.css">
+  <link rel="stylesheet" type="text/css" href="/static/admin/css/nav_sidebar.css">
+  <link rel="stylesheet" type="text/css" href="/static/admin/css/login.css">
+  <link rel="stylesheet" type="text/css" href="/static/admin/css/responsive.css">
+</head>
+<body class="login">
+  <div id="container">
+    <div id="header">
+      <div id="branding">
+        <h1 id="site-name"><a href="/">Django administration</a></h1>
+      </div>
+    </div>
+    <div id="content" class="colM">
+      <div id="content-main">
+        <form method="post" id="registration-form">
+          {% csrf_token %}
+          <div class="form-row">
+            <label class="required" for="{{ form.username.id_for_label }}">Username:</label>
+            {{ form.username }}
+            {% if form.username.errors %}
+              <div class="text-danger">
+                {{ form.username.errors.as_text }}
+              </div>
+            {% endif %}
+          </div>
+          <div class="form-row">
+            <label class="required" for="{{ form.email.id_for_label }}">Email:</label>
+            {{ form.email }}
+            {% if form.email.errors %}
+              <div class="text-danger">
+                {{ form.email.errors.as_text }}
+              </div>
+            {% endif %}
+          </div>
+          <div class="form-row">
+            <label class="required" for="{{ form.password1.id_for_label }}">Password:</label>
+            {{ form.password1 }}
+            {% if form.password1.errors %}
+              <div class="text-danger">
+                {{ form.password1.errors.as_text }}
+              </div>
+            {% endif %}
+          </div>
+          <div class="form-row">
+            <label class="required" for="{{ form.password2.id_for_label }}">Confirm Password:</label>
+            {{ form.password2 }}
+            {% if form.password2.errors %}
+              <div class="text-danger">
+                {{ form.password2.errors.as_text }}
+              </div>
+            {% endif %}
+          </div>
+          {% if success %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+              Registration successful. Redirecting to login page...
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          {% elif error_message %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              {{ error_message }}
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          {% endif %}
+          <div class="submit-row">
+            <input type="submit" value="Sign up" class="btn btn-primary btn-block">
+          </div>
+        </form>
+        <br>
+        <form method="post">
+          {% csrf_token %}
+          <p class="text-center mt-3">Already have an account? <a href="{% url 'login' %}">Log in</a></p>
+        </form>
+        {% if error_message %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          {{ error_message }}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+

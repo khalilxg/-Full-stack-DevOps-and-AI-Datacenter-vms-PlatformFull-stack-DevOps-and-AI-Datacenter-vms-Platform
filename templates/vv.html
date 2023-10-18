@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+
+<html lang="en-us" dir="ltr">
+<head>
+<title>Site administration | Django site admin</title>
+<link rel="stylesheet" type="text/css" href="/static/admin/css/base.css">
+
+  <link rel="stylesheet" type="text/css" href="/static/admin/css/nav_sidebar.css">
+  <script src="/static/admin/js/nav_sidebar.js" defer></script>
+
+<link rel="stylesheet" type="text/css" href="/static/admin/css/dashboard.css">
+
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/static/admin/css/responsive.css">
+
+<meta name="robots" content="NONE,NOARCHIVE">
+</head>
+
+
+<body class=" dashboard"
+  data-admin-utc-offset="0">
+
+<!-- Container -->
+<div id="container">
+
+    
+    <!-- Header -->
+    <div id="header">
+        <div id="branding">
+        
+<h1 id="site-name"><a href="/my-page">Django</a></h1>
+
+        </div>
+        
+        
+        <div id="user-tools">
+            
+                Welcome,
+                <strong>{{ user.username }}</strong>.
+                <a href="/password_change/">Change password</a> /       
+                <a href="{% url 'logout' %}">Log out</a>
+        </div>
+
+    </div>
+    <!-- END Header -->
+    
+    
+
+    <div class="main shifted" id="main">
+
+      <div class="content">
+ <!-- Content -->
+        <div id="content" class="colMS">
+          
+          <h1>Successfull Payement</h1>
+    
+          <p>-</p>  
+            
+          <p>The creation of your VM is in process.Go to <a href="/managevm/">managevm</a> for tweaking and accessing.</p>
+          <p>-</p>  
+            
+          <p>We are the fastest Cloud Provider in Tunis,  your fresh created VM will be ready in 60s </p>
+      
+
+          <br class="clear">
+        </div>
+
+        <div id="footer"></div>
+      </div>
+    </div>
+
+
+
+
+</div>
+<!-- END Container -->
+</body>
+</html>
