@@ -1,1 +1,1 @@
-# -Full-stack-DevOps-and-AI-Datacenter-vms-PlatformFull-stack-DevOps-and-AI-Datacenter-vms-Platform
+THIS IS A FULL CLOUD PYTHON AND AI PROJECT FOR CREATING AND HOSTING VMS AND PERFORM SECURITY ACTIVITIES ON TOP OF K8S.
